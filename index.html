@@ -9,45 +9,170 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
   <title>How to build single page application with Backbone.js</title>
-  
-  <link href="assets/css/bootstrap-2.3.0.css" rel="stylesheet" media="screen" />
-  <link href="assets/css/bootstrap-narrow-0.0.1.css" rel="stylesheet" media="screen" />
-  <link href='http://fonts.googleapis.com/css?family=Averia+Gruesa+Libre' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
   <link href="css/main.css" rel="stylesheet" media="screen" />
- 
 </head>
 <body>
 
-  <a href="https://github.com/mitsuruog/SPA-with-Backbone.git"><img style="position: fixed; top: 0; right: 0; border: 0;z-index: 999;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
   <!--app root  -->
   <div id="app"></div>
-  
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+  <!-- templates start -->
+
+  <script id="layout-template" type="text/x-handlebars-template">
+  <header id="header-wrap">
+   <div id="header-container">
+      <div id="header">
+      </div>
+    </div>
+  </header>
+
+  <div id="container">
+
+    <div id="history">
+      <div id="history_title"></div>
+      <div id="history_list"></div>
+    </div>
+
+    <div id="search_results">
+    </div>
+
+  </div>
+
+  <footer id="footer-wrap">
+    <div id="footer-container">
+      <div id="footer"></div>
+    </div>
+  </footer>
+  </script>
+
+  <script id="search-template" type="text/x-handlebars-template">
+  Search Bar
+  </script>
+
+  <script id="search_bar-template" type="text/x-handlebars-template">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+     <a class="brand" href="#" title="How to build single page application with Backbone.js">SPA-with-Backbone.js</a>
+     <div class="nav-collapse collapse navbar-inverse-collapse">
+       <form class="form-search navbar-search pull-left" action="">
+         <div class="input-append">
+           <input type="text" name="query" id="query" value="" class="search-query" />
+           <button id="btn_search" class="btn btn-inverse">
+             <i class="icon-search icon-white"></i>
+           </button>
+         </div>
+         <div id="search_types">
+           <input type="radio" name="service" id="twitter" value="twitter" />
+           <label for="twitter" class="inline">Twitter</label>
+           <input type="radio" name="service" id="hotpepper" value="hotpepper" checked="checked"/>
+           <label for="hotpepper">Hotpepper</label>
+         </div>
+       </form>
+     </div>
+    </div>
+  </div>
+  </script>
+
+  <script id="tabs-template" type="text/x-handlebars-template">
+  <ul id="tab" class="nav nav-tabs">
+    <li class="active" data-toggle="tab" data-service="twitter">
+      <a href="#twitter_list">Twitter</a>
+    </li>
+    <li class="" data-toggle="tab" data-service="hotpepper">
+      <a href="#hotpepper_list">Hotpepper</a>
+    </li>
+  </ul>
+  <div id="tab-content" class="tab-content">
+    <div class="tab-pane active" id="twitter_list" data-service="twitter"></div>
+    <div class="tab-pane" id="hotpepper_list" data-service="hotpepper"></div>
+  </div>
+  </script>
+
+  <script id="history-template" type="text/x-handlebars-template">
+  {{#each history}}
+  <ul class="history" data-id="{{this.id}}">
+    <li class="history_contents">
+      <span class="query">{{this.query}}</span>
+      <span class="service">({{this.service}})</span>
+    </li>
+    <li class="history_buttons">
+      <i class="icon-remove-sign icon-white btn_delete"></i>
+    </li>
+  </ul>
+  {{/each}}
+  </script>
+
+  <script id="hotpepper-template" type="text/x-handlebars-template">
+  <ul id="hotpepper_list">
+  {{#each models}}
+    <li>
+      <span class="img">
+        <img src="{{this.logo_image}}">
+      </span>
+      <span class="shop">
+        <a href="{{this.urls.pc}}" target="_blank">{{this.name}}</a>
+        <span class="catch">{{this.catch}}</span>
+        <span class="access">{{this.access}}</span>
+        <span class="address">{{this.address}}</span>
+      </span>
+    </li>
+    {{/each}}
+  </ul>
+  </script>
+
+  <!-- not implemented -->
+  <!--
+  <script id="twitter-template" type="text/x-handlebars-template">
+  <ul id="twitter_list">
+  {{#each models}}
+    <li>
+      <span class="img">
+        <img src="{{this.user.profile_image_url}}">
+      </span>
+      <span class="author">
+        <a href="https://twitter.com/{{this.user.screen_name}}" target="_blank">@{{this.from_user}}</a></span>
+        <span class="body">{{{this.text}}}</span>
+        <span class="time"><a href="https://twitter.com/{{this.user.screen_name}}/status/{{this.id_str}}" target="_blank">{{this.created_at}}</a>
+      </span>
+    </li>
+    {{/each}}
+  </ul>
+  </script>
+  -->
+
+  <script id="footer-template" type="text/x-handlebars-template">
+  Footer
+  </script>
+
+  <!-- templates end -->
+
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <script type="text/javascript" src="assets/js/bootstrap-2.3.0.js"></script>
-  <script type="text/javascript" src="assets/js/underscore-1.4.4.js"></script>
-  <script type="text/javascript" src="assets/js/backbone-0.9.10.js"></script>
-  <script type="text/javascript" src="assets/js/backbone.localStorage-1.1.0.js"></script>
-  <script type="text/javascript" src="assets/js/moment-2.0.0.js"></script>
-  <script type="text/javascript" src="assets/js/handlebars-1.0.0-rc.3.js"></script>
-  <script type="text/javascript" src="assets/js/twitter-text.js"></script>
+  <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/underscore.js"></script>
+  <script type="text/javascript" src="assets/js/backbone.js"></script>
+  <script type="text/javascript" src="assets/js/backbone.localStorage.js"></script>
+  <script type="text/javascript" src="assets/js/handlebars.js"></script>
+  <script type="text/javascript" src="assets/js/moment.js"></script>
  
   <script type="text/javascript" src="js/namespace.js"></script>
   <script type="text/javascript" src="js/templates/layout.js"></script>
-  <script type="text/javascript" src="js/models/twitter.js"></script>
+  <!--<script type="text/javascript" src="js/models/twitter.js"></script>-->
   <script type="text/javascript" src="js/models/hotpepper.js"></script>
   <script type="text/javascript" src="js/collections/search_history_list.js"></script>
-  <script type="text/javascript" src="js/collections/twitter_list.js"></script>
+  <!--<script type="text/javascript" src="js/collections/twitter_list.js"></script>-->
   <script type="text/javascript" src="js/collections/hotpepper_list.js"></script>
   <script type="text/javascript" src="js/views/search_bar.js"></script>
   <script type="text/javascript" src="js/views/tabs.js"></script>
   <script type="text/javascript" src="js/views/search_results.js"></script>
   <script type="text/javascript" src="js/views/history.js"></script>
   <script type="text/javascript" src="js/views/footer.js"></script>
-  <script type="text/javascript" src="js/app.js"></script> 
- 
+  <script type="text/javascript" src="js/app.js"></script>
+
 </body>
 </html>
+
+

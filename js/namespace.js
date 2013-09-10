@@ -1,7 +1,8 @@
+// init namespaces
 var MyApp = {
-    Models: {},
-    Collections: {},
-    Views: {},
-    App: {},
-    Templates: {}
+ 	Models: {},
+ 	Collections: {},
+ 	Views: {},
+ 	App: {},
+ 	Templates: {}
 };

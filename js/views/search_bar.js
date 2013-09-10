@@ -6,15 +6,11 @@ MyApp.Views.SearchBar = Backbone.View.extend({
 		'click #btn_search': 'search'
 	},
 
-	initialize: function () {
-
+	initialize: function() {
 		this.$el.html(this.tmpl());
-		this.$el.find('#twitter').attr('checked', true);
-
 	},
 
-	search: function (e) {
-
+	search: function(e) {
 		var $checked = this.$el.find('input[type=radio]:checked'),
 			query = $('#query').val(),
 			service = $checked.val(),
@@ -25,9 +21,9 @@ MyApp.Views.SearchBar = Backbone.View.extend({
 		search.query = query;
 		search.service = service;
 
+		// Globalイベントを発火
 		MyApp.mediator.trigger('search', search);
 		MyApp.mediator.trigger('search:' + service, search);
-
 	}
 
 });
